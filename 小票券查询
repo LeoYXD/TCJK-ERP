@@ -1,0 +1,47 @@
+SELECT * from
+(select distinct a.mkt        as 所在门店,
+                trunc(d.rqsj)      as 销售日期,
+                a.billno     as 小票号,
+                d.HYKH       as 会员卡号,
+                a.code       as 商品编码,
+                c.goodslname as 商品名称,
+                a.name       as 券名称,
+                a.memo       as 券号,
+                a.sl         as 销售数量,
+                a.hjje       as 销售金额,
+                a.HJZK       as 销售折扣额,
+                a.ypopzke    as 其中券折扣额
+  from javapos.salegoods@javapos_pg01 a
+ inner join (select billno
+               from javapos.salegoods@javapos_pg01 a
+           where memo is not null) b
+    on a.billno = b.billno
+  left join javapos.goods@javapos_pg01 c
+    on a.code = c.goodsid
+  left join javapos.salehead@javapos_pg01 d
+    on a.billno = d.billno
+ union all
+ select distinct a.mkt        as 所在门店,
+                trunc(d.rqsj)      as 销售日期,
+                a.billno     as 小票号,
+                d.HYKH       as 会员卡号,
+                a.code       as 商品编码,
+                c.goodslname as 商品名称,
+                a.name       as 券名称,
+                a.memo       as 券号,
+                a.sl         as 销售数量,
+                a.hjje       as 销售金额,
+                a.HJZK       as 销售折扣额,
+                a.ypopzke    as 其中券折扣额
+  from javapos.salegoods@javapos_pg02 a
+ inner join (select billno
+               from javapos.salegoods@javapos_pg02 a
+           where memo is not null) b
+    on a.billno = b.billno
+  left join javapos.goods@javapos_pg02 c
+    on a.code = c.goodsid
+  left join javapos.salehead@javapos_pg02 d
+    on a.billno = d.billno) t
+		where t.销售日期 >=date'2018-05-29'
+		and t.销售日期 <=date'2018-05-29'
+		
